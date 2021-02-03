@@ -1,0 +1,67 @@
+
+# Packages required for Twitter mining
+require (twitteR)
+require (RCurl)
+require(tm)
+require(wordcloud)
+require(stopwords)
+require(stringi)
+require(sentimentr)
+require(stringr)
+
+setwd("C:/Users/valde/Documents/tallericaepp")
+
+# Sentiment analysis
+file.choose()
+# Do not forget specify de R work directory ir order to read the corpus file properly
+folder <- "C:/Users/valde/Documents/tallericaepp"
+list.files(path=folder)
+list.files(path=folder, pattern="*.txt")
+# Capture your txt book here
+filelist <- list.files(path=folder, pattern="trumpbook.txt")
+filelist
+typeof(filelist)
+lapply(filelist, FUN=readLines)
+corpus2 <- lapply(filelist, FUN=readLines)
+lapply (corpus2, FUN=paste, collapse="")
+corpus2 <- lapply (corpus2, FUN=paste, collapse="")
+
+
+# Cleaning document
+gsub(patter="\\W", replace=" ", corpus2)
+corpus3 <- gsub(patter="\\W", replace=" ", corpus2)
+gsub(pattern="\\d", replace=" ", corpus3)
+corpus3 <- gsub(pattern="\\d", replace=" ", corpus3)
+tolower(corpus3)
+corpus3 <- tolower(corpus3)
+removeWords(corpus3, stopwords())
+corpus3 <- removeWords(corpus3, stopwords())
+gsub(pattern="\\b[A-z]\\b{1}", replace=" ", corpus3)
+corpus3 <- gsub(pattern="\\b[A-z]\\b{1}", replace=" ", corpus3)
+stripWhitespace(corpus3)
+corpus3 <- stripWhitespace(corpus3)
+x11()
+wordcloud(corpus3, random.order=F, col=rainbow(50))
+
+
+opinion.lexicon.pos <- scan('positive-words.txt', what='character', comment.char=';')
+opinion.lexicon.neg <- scan('negative-words.txt', what='character', comment.char=';')
+str_split(corpus3, pattern="\\s+")
+BOOK_bag <- str_split(corpus3,pattern="\\s+")
+class(BOOK_bag)
+BOOK_bag
+lapply(BOOK_bag, function(x) {sum(!is.na(match(x,opinion.lexicon.pos)))})
+lapply(BOOK_bag, function(x) {sum(!is.na(match(x,opinion.lexicon.neg)))})
+
+#Hacer un cloud de palabras negativas
+#wordcloud(opinion.lexicon.neg, random.order=F, col="red")
+
+#Hacer un cloud de palabras positivas
+#wordcloud(opinion.lexicon.pos, random.order=F, col="green")
+
+# Sentiment score
+# Positive minus Negative words
+lapply(BOOK_bag, function(x) {sum(!is.na(match(x,opinion.lexicon.pos))) - sum(!is.na(match(x,opinion.lexicon.neg)))})
+score <- lapply(BOOK_bag, function(x) {sum(!is.na(match(x,opinion.lexicon.pos))) - sum(!is.na(match(x,opinion.lexicon.neg)))})
+score
+
