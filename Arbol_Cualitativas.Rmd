@@ -1,0 +1,72 @@
+---
+title: "Árbol con variables cualitativas1"
+author: "Armando Valdés López"
+date: "22 de noviembre de 2019"
+output: html_document
+---
+###Tenis
+
+####1.-Primero traemos el fichero
+```{r}
+setwd("C:/Users/valde/OneDrive/SASUniversityEdition/myfolders/Bases_de_Datos")
+data_tenis<-read.csv("Tenis.csv")
+```
+#### 2.-Vemos la estructura de los datos
+```{r}
+summary(data_tenis)
+head(data_tenis,3)
+tail(data_tenis,3)
+str(data_tenis)
+
+#quitamos la columna dia
+data_tenis$Dia <- NULL
+str(data_tenis)
+```
+#### Traemos las bibliotecas
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+#Biblioteca rpart
+library(rpart)
+library(rpart.plot)
+#Biblioteca c50
+library(C50)
+library(class)
+library(party)#biblioteca party
+library(tree)#biblioteca tree
+```
+```{r}
+#data_tenis$Pronostico<-as.factor(data_tenis$Pronostico)
+#data_tenis$Temperatura<-as.factor(data_tenis$Temperatura)
+#data_tenis$Humedad<-as.factor(data_tenis$Humedad)
+#data_tenis$Viento<-as.factor(data_tenis$Viento)
+```
+
+
+#### 1.-Generamos los modelos
+
+##### 1.1 Modelo C50
+```{r}
+modelo_c50<-C5.0(data_tenis[,c(1:4)],data_tenis$Juega_Tenis)
+plot(modelo_c50)
+#summary(modelo_c50)
+```
+##### 1.2 Modelo Rpart
+```{r}
+modelo_rpart<-rpart(Juega_Tenis~Pronostico+Temperatura+Humedad+Viento,
+                    method="anova",data=data_tenis)
+rpart.plot(modelo_rpart)
+
+```
+
+##### 1.3 Modelo Party
+
+```{r}
+modelo_party1<-ctree(Juega_Tenis~., data_tenis)
+plot(modelo_party1)
+```
+##### 1.3 Modelo Tree
+```{r}
+modelo_tree <- tree(Juega_Tenis~., data=data_tenis)
+plot(modelo_tree)
+text(modelo_tree)
+```
+
