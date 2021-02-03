@@ -1,0 +1,24 @@
+#para ejercicio de tenis en R copiar código
+tenis_data<-read.csv(file.choose(),stringsAsFactors=FALSE)
+library(C50)
+library(class)
+modelo_tenis<-C5.0(tenis_data[,c(2:5)],factor(tenis_data$Juega_Tenis))
+plot(modelo_tenis)
+
+
+#para ejercicio de Iris en R copiar código
+data_iris<-read.csv(file.choose(),stringsAsFactors=FALSE)
+library(C50)
+library(class)
+modelo_iris<-C5.0(data_iris[,c(1:4)],factor(data_iris$variety))
+plot(modelo_iris)
+summary(modelo_iris)
+
+
+#para ejercicio de paises en R copiar código
+data_paises<-read.csv(file.choose(),stringsAsFactors=FALSE)
+library(C50)
+library(class)
+modelo_paises<-C5.0(data_paises[,c(2:10)],factor(data_paises$Assignments))
+plot(modelo_paises)
+summary(modelo_paises)

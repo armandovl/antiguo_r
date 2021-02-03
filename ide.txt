@@ -1,0 +1,5 @@
+alteryx
+glueviz
+knime
+orange3
+pentaho
