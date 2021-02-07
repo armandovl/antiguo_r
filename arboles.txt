@@ -1,0 +1,64 @@
+#traemos el fichero
+setwd("C:/Users/Armando/OneDrive/SASUniversityEdition/myfolders/Bases_de_Datos")
+data_creditos<-read.csv("10.-valoracion_creditos.csv")
+
+#otra opcion
+#data_creditos<-read.csv("10.-valoracion_creditos.csv",stringsAsFactors=TRUE)
+
+###############como cambiar
+Datos1$Pclass= as.factor(Datos1$Pclass)
+Datos1$Name= as.factor(Datos1$Name)
+Datos1$Sex= as.factor(Datos1$Sex)
+Datos1$Embarked= as.factor(Datos1$Embarked)
+Datos1$Survived= as.factor(Datos1$Survived)
+#####################
+
+#Estructura de los datos
+summary(data_creditos)
+str(data_creditos)
+head(data_creditos,3)
+tail(data_creditos,3)
+
+#########################################Biblioteca rpart###################################
+library(rpart)
+library(rpart.plot)
+
+#modelo rpart
+modelo_rpart<-rpart(Valoracion_credito~Edad+Ingresos+Tarjetas_credito
+                    +Educacion+Creditos_coche,
+                    method = "class",
+                    data=data_creditos)
+rpart.plot(modelo_rpart)
+#importancia del modelo
+library(caret) # Machine learning
+dt_importance <- varImp(modelo_rpart)
+
+
+####################################modelo party##############################################
+
+install.packages("party")
+library(party)
+
+#modelo party
+
+modelo_party<-ctree(Valoracion_credito~Edad+Ingresos+Tarjetas_credito
+                    +Educacion+Creditos_coche, data_creditos)
+plot(modelo_party)
+
+modelo_party1<-ctree(Valoracion_credito~., data_creditos)
+plot(modelo_party1)
+
+################################modelo tree##################################################
+
+library(tree)
+#modelo tree
+modelo_tree <- tree(Valoracion_credito~., data=data_creditos= "gini")
+plot(modelo_tree)
+text(modelo_tree)
+
+
+############################modelo c50#####################################################
+#modelo C50
+modelo_c50<-C5.0(data_creditos[,c(2:6)],data_creditos$Valoracion_credito)
+plot(modelo_c50)
+summary(modelo_c50)
